@@ -2,9 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Admin {
+  email: String!
+  password: String!
+  userName: String!
+}
+
+type AdminResponse {
+  email: String!
+  id: ID!
+  userName: String!
+}
+
 type ApplicationUser {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+input CreateAdminInput {
+  email: String!
+  password: String!
+  userName: String!
 }
 
 input CreateApplicationUserInput {
@@ -36,12 +54,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  createAdmin(createAdminInput: CreateAdminInput!): Admin!
   createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
   createProject(createProjectInput: CreateProjectInput!): Project!
   createUser(createUserInput: CreateUserInput!): User!
+  removeAdmin(id: String!): Admin!
   removeApplicationUser(id: Int!): ApplicationUser!
   removeProject(id: Int!): Project!
   removeUser(id: Int!): User!
+  updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateApplicationUser(updateApplicationUserInput: UpdateApplicationUserInput!): ApplicationUser!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -56,12 +77,21 @@ type Project {
 }
 
 type Query {
+  admin(id: Int!): Admin!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
+  listOfAdmins: [AdminResponse!]!
   project(id: Int!): Project!
   projects: [Project!]!
   user(id: Int!): User!
   users: [User!]!
+}
+
+input UpdateAdminInput {
+  _id: String!
+  email: String
+  password: String
+  userName: String
 }
 
 input UpdateApplicationUserInput {

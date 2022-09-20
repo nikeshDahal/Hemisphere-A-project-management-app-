@@ -5,10 +5,10 @@ import { AppService } from './app.service';
 import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { AdminUsersModule } from './admin/admin-users/admin-users.module';
 import { ApplicationUsersModule } from './application-users/application-users.module';
 import { UsersModule } from './admin/users/users.module';
 import { ProjectsModule } from './admin/projects/projects.module';
+import { AdminsModule } from './admin/admins/admins.module';
 
 @Module({
   imports: [
@@ -22,6 +22,7 @@ import { ProjectsModule } from './admin/projects/projects.module';
     ApplicationUsersModule,
     UsersModule,
     ProjectsModule,
+    AdminsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
