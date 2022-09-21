@@ -5,15 +5,26 @@ import mongoose from 'mongoose';
 @Schema()
 @ObjectType()
 export class Admin extends mongoose.Document {
-  @Prop({type:String})
+
+  @Prop({type:String,required: true})
   @Field()
   userName:string
 
-  @Prop({type:String})
+  @Prop({
+    type:String,
+    unique: true,
+    trim: true,
+    lowercase: true,
+    required: true,
+  })
   @Field()
   email:string
 
-  @Prop({type:String})
+  @Prop({
+    type:String,
+    trim: true,
+    required: true,
+  })
   @Field()
   password:string
 

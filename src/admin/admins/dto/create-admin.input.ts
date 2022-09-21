@@ -10,5 +10,4 @@ export class CreateAdminInput {
 
   @Field(()=>String)
   password:string
-
 }

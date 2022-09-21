@@ -63,7 +63,7 @@ type Mutation {
   createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
   createProject(createProjectInput: CreateProjectInput!): Project!
   createUser(createUserInput: CreateUserInput!): User!
-  removeAdmin(id: String!): Admin!
+  removeAdmin: Admin!
   removeApplicationUser(id: Int!): ApplicationUser!
   removeProject(id: Int!): Project!
   removeUser(id: Int!): User!
@@ -94,7 +94,6 @@ type Query {
 }
 
 input UpdateAdminInput {
-  _id: String!
   email: String
   password: String
   userName: String

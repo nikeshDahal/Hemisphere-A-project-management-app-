@@ -29,13 +29,15 @@ export class AdminsResolver {
     return currentAdmin
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => AdminResponse,{name:'updateAdmin'})
-  updateAdmin(@Args('updateAdminInput') updateAdminInput: UpdateAdminInput) {
-    return this.adminsService.update(updateAdminInput._id, updateAdminInput);
+  updateAdmin(@CurrentAdmin() currentAdmin:any , @Args('updateAdminInput') updateAdminInput: UpdateAdminInput) {
+    return this.adminsService.update(currentAdmin._id, updateAdminInput);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Admin,{name:'removeAdmin'})
-  removeAdmin(@Args('id') id: string) {
-    return this.adminsService.remove(id);
+  async removeAdmin(@CurrentAdmin() currentAdmin:any) {
+    return this.adminsService.remove(currentAdmin._id);
   }
 }

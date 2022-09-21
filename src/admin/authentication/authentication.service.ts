@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AdminsService } from '../admins/admins.service';
 import { loginInput } from './dto/login.input';
-import * as bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 import { JwtService } from '@nestjs/jwt';
 // import { CreateAuthenticationInput } from './dto/login.input';
 // import { UpdateAuthenticationInput } from './dto/update-authentication.input';
