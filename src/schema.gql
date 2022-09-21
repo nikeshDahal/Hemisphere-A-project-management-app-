@@ -8,6 +8,11 @@ type Admin {
   userName: String!
 }
 
+type AdminLoginResponse {
+  access_token: String!
+  admin: AdminResponse!
+}
+
 type AdminResponse {
   email: String!
   id: ID!
@@ -77,10 +82,11 @@ type Project {
 }
 
 type Query {
-  admin(id: Int!): Admin!
+  AdminProfile: Admin!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
   listOfAdmins: [AdminResponse!]!
+  loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
   project(id: Int!): Project!
   projects: [Project!]!
   user(id: Int!): User!
@@ -135,4 +141,9 @@ enum UserType {
   NORMAL_STAFF
   PROJECT_MANAGER
   TRADIES
+}
+
+input loginInput {
+  email: String!
+  password: String!
 }

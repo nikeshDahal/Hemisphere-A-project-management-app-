@@ -9,6 +9,7 @@ import { ApplicationUsersModule } from './application-users/application-users.mo
 import { UsersModule } from './admin/users/users.module';
 import { ProjectsModule } from './admin/projects/projects.module';
 import { AdminsModule } from './admin/admins/admins.module';
+import { AuthenticationModule } from './admin/authentication/authentication.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AdminsModule } from './admin/admins/admins.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context:({req})=>({req}),
       sortSchema: true,
     }),
     // AdminUsersModule,
@@ -23,6 +25,7 @@ import { AdminsModule } from './admin/admins/admins.module';
     UsersModule,
     ProjectsModule,
     AdminsModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,6 +4,9 @@ import { Admin } from './entities/admin.entity';
 import { CreateAdminInput } from './dto/create-admin.input';
 import { UpdateAdminInput } from './dto/update-admin.input';
 import { AdminResponse } from './dto/response-admin.output';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { CurrentAdmin } from '../authentication/Decorator/current.admin';
 
 @Resolver(() => Admin)
 export class AdminsResolver {
@@ -14,14 +17,16 @@ export class AdminsResolver {
     return this.adminsService.create(createAdminInput);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [AdminResponse], { name: 'listOfAdmins' })
   listAdmins() {
     return this.adminsService.findAll();
   }
 
-  @Query(() => Admin, { name: 'admin' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.adminsService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  @Query(() => Admin, { name: 'AdminProfile' })
+  async myProfile(@CurrentAdmin() currentAdmin:Admin) {
+    return currentAdmin
   }
 
   @Mutation(() => AdminResponse,{name:'updateAdmin'})

@@ -56,4 +56,8 @@ export class AdminsService {
     const admin = await this.adminModel.findByIdAndRemove({_id:id});
     return admin
   }
+
+  async findByEmail(email:string){
+     return await this.adminModel.findOne({email})
+  }
 }
