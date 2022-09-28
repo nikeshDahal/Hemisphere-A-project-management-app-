@@ -17,11 +17,11 @@ export class AdminsResolver {
     return this.adminsService.create(createAdminInput);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Query(() => [AdminResponse], { name: 'listOfAdmins' })
-  listAdmins() {
-    return this.adminsService.findAll();
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Query(() => [AdminResponse], { name: 'listOfAdmins' })
+  // listAdmins() {
+  //   return this.adminsService.findAll();
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Query(() => Admin, { name: 'AdminProfile' })

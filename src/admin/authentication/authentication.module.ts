@@ -4,6 +4,7 @@ import { AuthenticationResolver } from './authentication.resolver';
 import { AdminsModule } from '../admins/admins.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/acess-token-strategy';
+import { sendMail } from './utils/sendEmail';
 
 @Module({
   imports:[
@@ -11,10 +12,10 @@ import { JwtStrategy } from './strategies/acess-token-strategy';
     JwtModule.register({
       secret: 'ACCESS_kEY',
       signOptions: {
-        expiresIn: '1800s',
+        expiresIn: '15m',
       },
     }),
   ],
-  providers: [AuthenticationResolver, AuthenticationService , JwtStrategy]
+  providers: [AuthenticationResolver, AuthenticationService , JwtStrategy , sendMail]
 })
 export class AuthenticationModule {}

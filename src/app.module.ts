@@ -10,6 +10,8 @@ import { UsersModule } from './admin/users/users.module';
 import { ProjectsModule } from './admin/projects/projects.module';
 import { AdminsModule } from './admin/admins/admins.module';
 import { AuthenticationModule } from './admin/authentication/authentication.module';
+import { ConfigModule } from '@nestjs/config';
+// import configuration from './admin/authentication/utils/configuration';
 
 @Module({
   imports: [
@@ -20,7 +22,12 @@ import { AuthenticationModule } from './admin/authentication/authentication.modu
       context:({req})=>({req}),
       sortSchema: true,
     }),
-    // AdminUsersModule,
+    ConfigModule.forRoot({
+      envFilePath:`.env.${process.env.NODE_ENV ||'dev'}`,
+      isGlobal: true,
+      expandVariables: true,
+    }),
+
     ApplicationUsersModule,
     UsersModule,
     ProjectsModule,

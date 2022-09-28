@@ -58,6 +58,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input ForgetPasswordInput {
+  email: String!
+}
+
+type ForgetPasswordResponse {
+  mailSend: Boolean!
+  token: String!
+}
+
 type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
   createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
@@ -83,9 +92,9 @@ type Project {
 
 type Query {
   AdminProfile: Admin!
+  ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
-  listOfAdmins: [AdminResponse!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
   project(id: Int!): Project!
   projects: [Project!]!

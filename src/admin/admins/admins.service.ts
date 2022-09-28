@@ -29,10 +29,10 @@ export class AdminsService {
     return createdAdmin.save();
   }
 
-  async findAll() {
-    const listOfAdmins = await this.adminModel.find({});
-    return listOfAdmins;
-  }
+  // async findAll() {
+  //   const listOfAdmins = await this.adminModel.find({});
+  //   return listOfAdmins;
+  // }
 
   async findOne(id: number) {
     const admin = await this.adminModel.findOne({ _id: id });
@@ -77,4 +77,8 @@ export class AdminsService {
   async findByEmail(email: string) {
     return await this.adminModel.findOne({ email });
   }
+
+  // async findByIdAndUpdate(adminId:string){
+
+  // }
 }

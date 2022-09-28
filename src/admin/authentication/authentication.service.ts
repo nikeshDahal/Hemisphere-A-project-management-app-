@@ -3,14 +3,20 @@ import { AdminsService } from '../admins/admins.service';
 import { loginInput } from './dto/login.input';
 const bcrypt = require('bcrypt');
 import { JwtService } from '@nestjs/jwt';
-// import { CreateAuthenticationInput } from './dto/login.input';
-// import { UpdateAuthenticationInput } from './dto/update-authentication.input';
+// import {sendForgetPasswordTokenMail} from './utils/sendEmail';
+// import {sendMail} from './utils/sendEmail';
+import { strict } from 'assert';
+import { ForgetPasswordInput } from './dto/forgetPassword-input';
+import { sendMail } from './utils/sendEmail';
+
+
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private adminService:AdminsService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private sendMail : sendMail
   ){}
 
   async loginAdmin(loginData:loginInput){
@@ -32,6 +38,41 @@ export class AuthenticationService {
       access_token
     }
   }
+
+  // async resetPassword()
+
+  async forgetPassword(forgetpasswordData:ForgetPasswordInput){
+    const admin = await this.adminService.findByEmail(forgetpasswordData.email);
+    if (!admin){
+      throw new BadRequestException("email not registered");
+    };
+    const payload = {
+      adminId:admin.id,
+      adminEmail :admin.email
+    }
+    const forgetPasswordTokens = await this.generateJwtToken(payload)
+    // var dynamic_template_data = {
+    //   token:forgetPasswordTokens
+    // }
+    const mailSend=await this.sendMail.sendForgetPasswordTokenMail(admin.email,admin.userName,forgetPasswordTokens)
+    return {
+      token:forgetPasswordTokens,
+      mailSend
+    }
+  }
+
+  // async generateOtp(email:string){
+  //     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+  //     const hashOtp = await bcrypt.hash(otp, 10);
+  //     await this.adminService.findByIdAndUpdate(
+  //       admin.id, {
+  //       otp: hashOtp,
+  //       otpCreatedAt: otpCreatedAt,
+  //     });
+  //     console.log("hash",hashOtp)
+  //     return { otp };
+  // }
+
 
   private async generateJwtToken(payload:any){
     return await this.jwtService.signAsync(payload)
