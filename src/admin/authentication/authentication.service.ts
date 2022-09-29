@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { strict } from 'assert';
 import { ForgetPasswordInput } from './dto/forgetPassword-input';
 import { sendMail } from './utils/sendEmail';
+import { ResetPasswordInput } from './dto/reset-password-input';
 
 
 
@@ -38,8 +39,21 @@ export class AuthenticationService {
       access_token
     }
   }
+  
+  async resetPassword(id:string , resetPasswordInput:ResetPasswordInput){
 
-  // async resetPassword()
+    //hash password from input
+    const newPassword = resetPasswordInput.newPassword
+    const confirmedPassword = resetPasswordInput.confirmPassword;
+    const matched = newPassword === confirmedPassword ? true:false
+    if(!matched){
+      throw new BadRequestException("confirmed password did not matched");
+    }
+    const hashedConfirmedPassword = await bcrypt.hash(confirmedPassword,10)
+    const updatedAdminPassword=await  this.adminService.resetPassword(id ,hashedConfirmedPassword)
+    return updatedAdminPassword
+
+  }
 
   async forgetPassword(forgetpasswordData:ForgetPasswordInput){
     const admin = await this.adminService.findByEmail(forgetpasswordData.email);
@@ -60,18 +74,6 @@ export class AuthenticationService {
       mailSend
     }
   }
-
-  // async generateOtp(email:string){
-  //     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-  //     const hashOtp = await bcrypt.hash(otp, 10);
-  //     await this.adminService.findByIdAndUpdate(
-  //       admin.id, {
-  //       otp: hashOtp,
-  //       otpCreatedAt: otpCreatedAt,
-  //     });
-  //     console.log("hash",hashOtp)
-  //     return { otp };
-  // }
 
 
   private async generateJwtToken(payload:any){

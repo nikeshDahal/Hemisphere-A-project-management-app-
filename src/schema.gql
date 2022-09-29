@@ -93,6 +93,7 @@ type Project {
 type Query {
   AdminProfile: Admin!
   ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
+  ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
@@ -100,6 +101,15 @@ type Query {
   projects: [Project!]!
   user(id: Int!): User!
   users: [User!]!
+}
+
+input ResetPasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+}
+
+type ResetPasswordOutput {
+  resetPassword: Boolean!
 }
 
 input UpdateAdminInput {

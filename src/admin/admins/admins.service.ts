@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateAdminInput } from './dto/create-admin.input';
 import { UpdateAdminInput } from './dto/update-admin.input';
 import { Admin } from './entities/admin.entity';
+import { ResetPasswordInput } from '../authentication/dto/reset-password-input';
 
 @Injectable()
 export class AdminsService {
@@ -34,7 +35,7 @@ export class AdminsService {
   //   return listOfAdmins;
   // }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const admin = await this.adminModel.findOne({ _id: id });
     if (!admin) {
       throw new NotFoundException('admin not found');
@@ -66,6 +67,16 @@ export class AdminsService {
     }
     console.log('updated Admin =>', updatedUser);
     return updatedUser;
+  }
+
+  async resetPassword(id:string,newPassword:string){
+    const admin = await this.adminModel.findById(id)
+    if(!admin){
+      throw new NotFoundException("admin not found")
+    }
+    admin.password = newPassword
+    await admin.save()
+    return true
   }
 
   async remove(id: string) {
