@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateAdminInput } from './dto/create-admin.input';
 import { UpdateAdminInput } from './dto/update-admin.input';
 import { Admin } from './entities/admin.entity';
-import { ResetPasswordInput } from '../authentication/dto/reset-password-input';
+
 
 @Injectable()
 export class AdminsService {
@@ -29,11 +29,6 @@ export class AdminsService {
     const createdAdmin = new this.adminModel(createAdminInput);
     return createdAdmin.save();
   }
-
-  // async findAll() {
-  //   const listOfAdmins = await this.adminModel.find({});
-  //   return listOfAdmins;
-  // }
 
   async findOne(id: string) {
     const admin = await this.adminModel.findOne({ _id: id });
@@ -88,8 +83,4 @@ export class AdminsService {
   async findByEmail(email: string) {
     return await this.adminModel.findOne({ email });
   }
-
-  // async findByIdAndUpdate(adminId:string){
-
-  // }
 }

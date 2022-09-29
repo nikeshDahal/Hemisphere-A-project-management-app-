@@ -4,7 +4,7 @@ import { UserType } from "../entities/user.entity";
 registerEnumType(UserType, { name: 'UserType' });
 
 @ObjectType()
-export class User {
+export class ApplicationUserOutput {
   @Field(() => ID)
   id: string;
 
@@ -29,6 +29,6 @@ export class User {
   @Field(() => UserType)
   userType: UserType;
 
-  @Field(() => String)
-  refreshToken: string;
+  // @Field(() => String)
+  // refreshToken: string;
 }

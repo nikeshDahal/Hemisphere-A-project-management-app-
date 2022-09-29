@@ -24,6 +24,16 @@ type ApplicationUser {
   exampleField: Int!
 }
 
+type ApplicationUserOutput {
+  companyName: String!
+  email: String!
+  id: ID!
+  name: String!
+  phone: Float!
+  userType: UserType!
+  username: String!
+}
+
 input CreateAdminInput {
   email: String!
   password: String!
@@ -71,15 +81,15 @@ type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
   createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
   createProject(createProjectInput: CreateProjectInput!): Project!
-  createUser(createUserInput: CreateUserInput!): User!
+  create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
   removeAdmin: Admin!
   removeApplicationUser(id: Int!): ApplicationUser!
   removeProject(id: Int!): Project!
-  removeUser(id: Int!): User!
+  removeUser(id: String!): User!
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateApplicationUser(updateApplicationUserInput: UpdateApplicationUserInput!): ApplicationUser!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
 }
 
 type Project {
@@ -96,11 +106,10 @@ type Query {
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
+  listApplicationusers: [ApplicationUserOutput!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
   project(id: Int!): Project!
   projects: [Project!]!
-  user(id: Int!): User!
-  users: [User!]!
 }
 
 input ResetPasswordInput {
