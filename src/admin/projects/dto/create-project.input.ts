@@ -2,6 +2,7 @@ import { InputType, Int, Field, ID } from '@nestjs/graphql';
 
 @InputType()
 export class CreateProjectInput {
+  
   @Field(() => String)
   projectName: string;
 

@@ -12,7 +12,7 @@ import { CurrentAdmin } from '../authentication/Decorator/current.admin';
 export class AdminsResolver {
   constructor(private readonly adminsService: AdminsService) {}
 
-  @Mutation(() => Admin)
+  @Mutation(() => AdminResponse)
   createAdmin(@Args('createAdminInput') createAdminInput: CreateAdminInput) {
     return this.adminsService.create(createAdminInput);
   }
@@ -24,7 +24,7 @@ export class AdminsResolver {
   // }
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => Admin, { name: 'AdminProfile' })
+  @Query(() => AdminResponse, { name: 'AdminProfile' })
   async myProfile(@CurrentAdmin() currentAdmin:Admin) {
     return currentAdmin
   }
@@ -36,7 +36,7 @@ export class AdminsResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Admin,{name:'removeAdmin'})
+  @Mutation(() => AdminResponse,{name:'removeAdmin'})
   async removeAdmin(@CurrentAdmin() currentAdmin:any) {
     return this.adminsService.remove(currentAdmin._id);
   }

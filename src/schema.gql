@@ -14,8 +14,8 @@ type AdminLoginResponse {
 }
 
 type AdminResponse {
+  _id: ID!
   email: String!
-  id: ID!
   userName: String!
 }
 
@@ -25,9 +25,9 @@ type ApplicationUser {
 }
 
 type ApplicationUserOutput {
+  _id: ID!
   companyName: String!
   email: String!
-  id: ID!
   name: String!
   phone: Float!
   userType: UserType!
@@ -78,38 +78,41 @@ type ForgetPasswordResponse {
 }
 
 type Mutation {
-  createAdmin(createAdminInput: CreateAdminInput!): Admin!
+  createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
   createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
-  createProject(createProjectInput: CreateProjectInput!): Project!
+  createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
   create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
-  removeAdmin: Admin!
+  removeAdmin: AdminResponse!
   removeApplicationUser(id: Int!): ApplicationUser!
-  removeProject(id: Int!): Project!
+  removeProject(id: String!): ProjectResponse!
   removeUser(id: String!): User!
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateApplicationUser(updateApplicationUserInput: UpdateApplicationUserInput!): ApplicationUser!
-  updateProject(updateProjectInput: UpdateProjectInput!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
   updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
 }
 
-type Project {
+type ProjectResponse {
+  _id: ID!
+  createdBy: AdminResponse!
   description: String!
   endDate: DateTime!
   projectName: String!
   startDate: DateTime!
   totalAssignedUser: Float
+  users: [ApplicationUserOutput!]!
 }
 
 type Query {
-  AdminProfile: Admin!
+  AdminProfile: AdminResponse!
   ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   applicationUser(id: Int!): ApplicationUser!
   applicationUsers: [ApplicationUser!]!
+  getThisProject(id: String!): ProjectResponse!
   listApplicationusers: [ApplicationUserOutput!]!
+  list_projects: [ProjectResponse!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
-  project(id: Int!): Project!
-  projects: [Project!]!
 }
 
 input ResetPasswordInput {

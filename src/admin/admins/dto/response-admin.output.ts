@@ -4,7 +4,7 @@ import { Field, HideField, ID, ObjectType } from "@nestjs/graphql";
 export class AdminResponse{
 
     @Field(()=>ID)
-    id:string;
+    _id:string;
 
     @Field(()=>String)
     userName:string;

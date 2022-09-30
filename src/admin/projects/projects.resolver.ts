@@ -3,33 +3,45 @@ import { ProjectsService } from './projects.service';
 import { Project } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
+import { ProjectResponse } from './dto/response-project.output';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { CurrentAdmin } from '../authentication/Decorator/current.admin';
+import { profileEnd } from 'console';
 
+@UseGuards(JwtAuthGuard)
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Mutation(() => Project)
-  createProject(@Args('createProjectInput') createProjectInput: CreateProjectInput) {
-    return this.projectsService.create(createProjectInput);
+ 
+  @Mutation(() => ProjectResponse)
+  async createProject(@CurrentAdmin() currentAdmin:any,@Args('createProjectInput') createProjectInput: CreateProjectInput) {
+    const [projects] = await this.projectsService.create(currentAdmin._id , createProjectInput);
+    return projects
   }
 
-  @Query(() => [Project], { name: 'projects' })
-  findAll() {
-    return this.projectsService.findAll();
+  @Query(() => [ProjectResponse], { name: 'list_projects' })
+  async findAll() {
+     const projects= await this.projectsService.findAll();
+     console.log("projects=>",projects)
+     return projects
   }
 
-  @Query(() => Project, { name: 'project' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.projectsService.findOne(id);
+  @Query(() => ProjectResponse, { name: 'getThisProject' })
+  async findOne(@Args('id') id: string) {
+    const [project] = await this.projectsService.findOne(id);
+    console.log("project=>",project)
+    return project
   }
 
-  @Mutation(() => Project)
+  @Mutation(() => ProjectResponse)
   updateProject(@Args('updateProjectInput') updateProjectInput: UpdateProjectInput) {
     return this.projectsService.update(updateProjectInput._id, updateProjectInput);
   }
 
-  @Mutation(() => Project)
-  removeProject(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => ProjectResponse)
+  removeProject(@Args('id') id: string) {
     return this.projectsService.remove(id);
   }
 }

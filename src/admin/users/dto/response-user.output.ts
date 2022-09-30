@@ -6,7 +6,7 @@ registerEnumType(UserType, { name: 'UserType' });
 @ObjectType()
 export class ApplicationUserOutput {
   @Field(() => ID)
-  id: string;
+  _id: string;
 
   @Field(() => String)
   name: string;
