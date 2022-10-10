@@ -7,6 +7,7 @@ import { AdminResponse } from './dto/response-admin.output';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentAdmin } from '../authentication/Decorator/current.admin';
+// import { RefreshJwtGuard } from '../authentication/guards/jwt-refresh.guard';
 
 @Resolver(() => Admin)
 export class AdminsResolver {
@@ -35,6 +36,7 @@ export class AdminsResolver {
     return this.adminsService.update(currentAdmin._id, updateAdminInput);
   }
 
+  // @UseGuards(RefreshJwtGuard)
   @UseGuards(JwtAuthGuard)
   @Mutation(() => AdminResponse,{name:'removeAdmin'})
   async removeAdmin(@CurrentAdmin() currentAdmin:any) {

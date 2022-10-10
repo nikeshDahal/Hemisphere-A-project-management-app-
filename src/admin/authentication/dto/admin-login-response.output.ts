@@ -8,5 +8,8 @@ export class AdminLoginResponse {
     admin:AdminResponse;
 
     @Field()
-    access_token:string;
+    accessToken:string;
+
+    @Field()
+    refreshToken:string;
 }

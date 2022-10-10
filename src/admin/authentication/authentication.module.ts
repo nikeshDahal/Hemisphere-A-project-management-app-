@@ -9,12 +9,7 @@ import { sendMail } from './utils/sendEmail';
 @Module({
   imports:[
     AdminsModule,
-    JwtModule.register({
-      secret: 'ACCESS_kEY',
-      signOptions: {
-        expiresIn: '15m',
-      },
-    }),
+    JwtModule.register({}),
   ],
   providers: [AuthenticationResolver, AuthenticationService , JwtStrategy , sendMail]
 })

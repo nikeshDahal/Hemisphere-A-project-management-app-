@@ -28,9 +28,9 @@ export class Admin extends mongoose.Document {
   @Field()
   password:string
 
-  // @Prop({ type: String })
-  // @Field()
-  // refreshToken: string;
+  @Prop({ type: String })
+  @Field()
+  refreshToken: string;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin)

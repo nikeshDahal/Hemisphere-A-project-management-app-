@@ -5,12 +5,14 @@
 type Admin {
   email: String!
   password: String!
+  refreshToken: String!
   userName: String!
 }
 
 type AdminLoginResponse {
-  access_token: String!
+  accessToken: String!
   admin: AdminResponse!
+  refreshToken: String!
 }
 
 type AdminResponse {
@@ -113,6 +115,7 @@ type Query {
   listApplicationusers: [ApplicationUserOutput!]!
   list_projects: [ProjectResponse!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
+  validateRefreshToken(refreshToken: String!): AdminLoginResponse!
 }
 
 input ResetPasswordInput {

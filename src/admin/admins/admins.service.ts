@@ -16,6 +16,10 @@ export class AdminsService {
   constructor(@InjectModel('Admin') private adminModel: Model<Admin>) {}
 
   async create(createAdminInput: CreateAdminInput) {
+    const length = await this.adminModel.find({}).count();
+    if(length >= 1){
+      throw new BadRequestException("only one admin is allowed ! SORRY")
+    }
     const admin = await this.adminModel.findOne({
       email: createAdminInput.email,
     });
