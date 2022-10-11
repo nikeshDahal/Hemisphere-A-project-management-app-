@@ -28,8 +28,12 @@ export class UsersService {
     return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return await this.userModel.findById(id);
+  }
+
+  async findByEmail(email:string){
+    return await this.userModel.findOne({email})
   }
 
   async update(id: string, updateUserInput: UpdateUserInput) {

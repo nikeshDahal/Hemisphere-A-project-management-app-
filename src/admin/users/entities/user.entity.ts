@@ -42,9 +42,9 @@ export class User extends mongoose.Document {
   @Field()
   userType: string;
 
-//   @Prop({ type: String })
-//   @Field()
-//   refreshToken: string;
+  @Prop({ type: String })
+  @Field()
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -29,6 +29,6 @@ export class ApplicationUserOutput {
   @Field(() => UserType)
   userType: UserType;
 
-  // @Field(() => String)
-  // refreshToken: string;
+  @Field(() => String)
+  refreshToken: string;
 }

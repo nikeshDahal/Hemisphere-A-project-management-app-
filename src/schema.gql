@@ -21,17 +21,13 @@ type AdminResponse {
   userName: String!
 }
 
-type ApplicationUser {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type ApplicationUserOutput {
   _id: ID!
   companyName: String!
   email: String!
   name: String!
   phone: Float!
+  refreshToken: String!
   userType: UserType!
   username: String!
 }
@@ -40,11 +36,6 @@ input CreateAdminInput {
   email: String!
   password: String!
   userName: String!
-}
-
-input CreateApplicationUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 input CreateProjectInput {
@@ -81,15 +72,12 @@ type ForgetPasswordResponse {
 
 type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
-  createApplicationUser(createApplicationUserInput: CreateApplicationUserInput!): ApplicationUser!
   createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
   create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
   removeAdmin: AdminResponse!
-  removeApplicationUser(id: Int!): ApplicationUser!
   removeProject(id: String!): ProjectResponse!
   removeUser(id: String!): User!
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
-  updateApplicationUser(updateApplicationUserInput: UpdateApplicationUserInput!): ApplicationUser!
   updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
   updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
 }
@@ -108,14 +96,15 @@ type ProjectResponse {
 type Query {
   AdminProfile: AdminResponse!
   ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
+  LoginUser(loginData: UserLoginInput!): UserLoginOutput!
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
-  applicationUser(id: Int!): ApplicationUser!
-  applicationUsers: [ApplicationUser!]!
   getThisProject(id: String!): ProjectResponse!
   listApplicationusers: [ApplicationUserOutput!]!
   list_projects: [ProjectResponse!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
+  userProfile: ApplicationUserOutput!
   validateRefreshToken(refreshToken: String!): AdminLoginResponse!
+  validateRefreshTokenOfUser(refreshToken: String!): UserLoginOutput!
 }
 
 input ResetPasswordInput {
@@ -131,12 +120,6 @@ input UpdateAdminInput {
   email: String
   password: String
   userName: String
-}
-
-input UpdateApplicationUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input UpdateProjectInput {
@@ -165,8 +148,20 @@ type User {
   name: String!
   password: String!
   phone: Float!
+  refreshToken: String!
   userType: String!
   username: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type UserLoginOutput {
+  accessToken: String!
+  refreshToken: String!
+  user: ApplicationUserOutput!
 }
 
 enum UserType {

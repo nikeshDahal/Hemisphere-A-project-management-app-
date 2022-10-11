@@ -8,7 +8,6 @@ import { AdminLoginResponse } from './dto/admin-login-response.output';
 import { ForgetPasswordResponse } from './dto/forget-password-response.output';
 import { ForgetPasswordInput } from './dto/forgetPassword-input';
 import { loginInput } from './dto/login.input';
-import { refreshTokenInput } from './dto/refresh-token-input';
 import { ResetPasswordInput } from './dto/reset-password-input';
 import { ResetPasswordOutput } from './dto/reset-password-response.output';
 import { Authentication } from './entities/authentication.entity';
