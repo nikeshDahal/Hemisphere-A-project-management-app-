@@ -57,6 +57,7 @@ export class ProjectsService {
     ]);
     console.log('projectResponse=>', projectResponse);
     return projectResponse;
+
   }
 
   async findAll() {
@@ -89,6 +90,10 @@ export class ProjectsService {
       { $unwind: '$createdBy' },
     ]);
     return projects;
+  }
+
+  async findAssignedProjects(id:string){
+    return await this.projectModel.find({ users:{ $in: [id] } })
   }
 
   async findOne(id: string) {

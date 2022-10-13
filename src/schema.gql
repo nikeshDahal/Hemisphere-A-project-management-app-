@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  _id: ID!
+  coordinates: [Float!]!
+  type: String!
+}
+
 type Admin {
   email: String!
   password: String!
@@ -32,10 +38,36 @@ type ApplicationUserOutput {
   username: String!
 }
 
+type AssignedProjectsOutput {
+  _id: ID!
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
+}
+
+type ClockInOutput {
+  _id: ID!
+  clockedInDate: String!
+  clockedInTime: String!
+  location: Address!
+  projectId: Project!
+  userId: User!
+}
+
 input CreateAdminInput {
   email: String!
   password: String!
   userName: String!
+}
+
+input CreateClockInInput {
+  location: CreateLocationInput!
+  projectId: ID!
+}
+
+input CreateLocationInput {
+  coordinates: [Float!]!
 }
 
 input CreateProjectInput {
@@ -70,8 +102,13 @@ type ForgetPasswordResponse {
   token: String!
 }
 
+type Location {
+  coordinates: Float!
+}
+
 type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
+  createClockIn(createClockInInput: CreateClockInInput!): ClockInOutput!
   createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
   create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
   removeAdmin: AdminResponse!
@@ -80,6 +117,14 @@ type Mutation {
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
   updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
+}
+
+type Project {
+  createdBy: Admin!
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
 }
 
 type ProjectResponse {
@@ -100,7 +145,9 @@ type Query {
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   getThisProject(id: String!): ProjectResponse!
   listApplicationusers: [ApplicationUserOutput!]!
+  listClockedIns: [ClockInOutput!]!
   list_projects: [ProjectResponse!]!
+  listingProjectAssignedToUser: [AssignedProjectsOutput!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
   userProfile: ApplicationUserOutput!
   validateRefreshToken(refreshToken: String!): AdminLoginResponse!

@@ -11,6 +11,7 @@ import { projectSchema } from './entities/project.entity';
       name:"Projects", schema:projectSchema
     }])
   ],
-  providers: [ProjectsResolver, ProjectsService]
+  providers: [ProjectsResolver, ProjectsService],
+  exports:[ProjectsService]
 })
 export class ProjectsModule {}

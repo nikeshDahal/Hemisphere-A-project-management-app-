@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 
 @Schema()
 @ObjectType()
+
 export class Admin extends mongoose.Document {
 
   @Prop({type:String,required: true})
