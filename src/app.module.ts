@@ -12,6 +12,7 @@ import { AuthenticationModule } from './admin/authentication/authentication.modu
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './application-users/auth/auth.module';
 import { ClockInModule } from './application-users/clock-in/clock-in.module';
+import { TaskModule } from './application-users/task/task.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ClockInModule } from './application-users/clock-in/clock-in.module';
     AuthenticationModule,
     AuthModule,
     ClockInModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],

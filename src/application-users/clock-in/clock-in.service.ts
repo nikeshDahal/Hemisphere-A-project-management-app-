@@ -48,4 +48,34 @@ export class ClockInService {
     console.log("clockinsss=>",clockIn)
     return clockIn
   }
+
+  async findMyClockIns(currentUserId:string){
+    const clockIns = await this.clockInModel.aggregate([
+      {
+        $match:{
+          userId:currentUserId
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField:'userId',
+          foreignField:'_id',
+          as:'userId'
+        },
+      },
+      { $unwind: '$userId' },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projectId',
+        },
+      },
+      { $unwind: '$projectId' },
+    ]);
+    console.log("clockinsss=>",clockIns)
+    return clockIns
+  }
 }

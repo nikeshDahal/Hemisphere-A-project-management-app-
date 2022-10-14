@@ -8,6 +8,7 @@ import { ClockInSchema } from './entities/clock-in.entity';
   imports:[
     MongooseModule.forFeature([{name:"ClockIn" , schema:ClockInSchema}])
   ],
-  providers: [ClockInResolver, ClockInService]
+  providers: [ClockInResolver, ClockInService],
+  exports:[ClockInService]
 })
 export class ClockInModule {}

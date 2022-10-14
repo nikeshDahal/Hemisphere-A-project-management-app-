@@ -7,11 +7,16 @@ import { AdminResponse } from './dto/response-admin.output';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentAdmin } from '../authentication/Decorator/current.admin';
+import { ClockInOutput } from 'src/application-users/clock-in/dto/clock-in-output';
+import { ClockInService } from 'src/application-users/clock-in/clock-in.service';
 // import { RefreshJwtGuard } from '../authentication/guards/jwt-refresh.guard';
 
 @Resolver(() => Admin)
 export class AdminsResolver {
-  constructor(private readonly adminsService: AdminsService) {}
+  constructor(
+    private readonly adminsService: AdminsService,
+    private readonly clockInService:ClockInService
+    ) {}
 
   @Mutation(() => AdminResponse)
   createAdmin(@Args('createAdminInput') createAdminInput: CreateAdminInput) {
@@ -41,5 +46,11 @@ export class AdminsResolver {
   @Mutation(() => AdminResponse,{name:'removeAdmin'})
   async removeAdmin(@CurrentAdmin() currentAdmin:any) {
     return this.adminsService.remove(currentAdmin._id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => [ClockInOutput], { name: 'listClockedIns' })
+  async findAll() {
+    return this.clockInService.findAllClockedInProjects();
   }
 }

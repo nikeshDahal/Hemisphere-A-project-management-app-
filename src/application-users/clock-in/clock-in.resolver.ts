@@ -20,9 +20,9 @@ export class ClockInResolver {
     return clockIn;
   }
 
-  @Query(() => [ClockInOutput], { name: 'listClockedIns' })
-  async findAll() {
-    return this.clockInService.findAllClockedInProjects();
+  @UseGuards(JwtAuthGuardUser)
+  @Query(() => [ClockInOutput], { name: 'MyClockIns' })
+  async findAll(@CurrentUser() currentUser:any) {
+    return this.clockInService.findMyClockIns(currentUser._id);
   }
-
 }

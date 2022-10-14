@@ -78,6 +78,14 @@ input CreateProjectInput {
   users: [ID!]!
 }
 
+input CreateTaskInput {
+  AssignedTo: ID!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  description: String!
+  projectId: ID!
+}
+
 input CreateUserInput {
   companyName: String!
   email: String!
@@ -110,12 +118,15 @@ type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
   createClockIn(createClockInInput: CreateClockInInput!): ClockInOutput!
   createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
+  createTask(createTaskInput: CreateTaskInput!): Task!
   create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
   removeAdmin: AdminResponse!
   removeProject(id: String!): ProjectResponse!
+  removeTask(id: Int!): Task!
   removeUser(id: String!): User!
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
+  updateTask(updateTaskInput: UpdateTaskInput!): Task!
   updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
 }
 
@@ -142,6 +153,7 @@ type Query {
   AdminProfile: AdminResponse!
   ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
   LoginUser(loginData: UserLoginInput!): UserLoginOutput!
+  MyClockIns: [ClockInOutput!]!
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   getThisProject(id: String!): ProjectResponse!
   listApplicationusers: [ApplicationUserOutput!]!
@@ -149,6 +161,7 @@ type Query {
   list_projects: [ProjectResponse!]!
   listingProjectAssignedToUser: [AssignedProjectsOutput!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
+  task(id: Int!): Task!
   userProfile: ApplicationUserOutput!
   validateRefreshToken(refreshToken: String!): AdminLoginResponse!
   validateRefreshTokenOfUser(refreshToken: String!): UserLoginOutput!
@@ -161,6 +174,14 @@ input ResetPasswordInput {
 
 type ResetPasswordOutput {
   resetPassword: Boolean!
+}
+
+type Task {
+  AssignedTo: User!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  description: String!
+  projectId: Project!
 }
 
 input UpdateAdminInput {
@@ -176,6 +197,15 @@ input UpdateProjectInput {
   projectName: String
   startDate: DateTime
   users: [ID!]
+}
+
+input UpdateTaskInput {
+  AssignedTo: ID
+  Deadline: DateTime
+  TitleOfTask: String
+  description: String
+  id: Int!
+  projectId: ID
 }
 
 input UpdateUserInput {
