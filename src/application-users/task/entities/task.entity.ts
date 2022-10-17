@@ -24,6 +24,10 @@ export class Task extends mongoose.Document {
   @Field()
   AssignedTo: User;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Field()
+  AssignedBy: User;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Project' })
   @Field()
   projectId: Project;

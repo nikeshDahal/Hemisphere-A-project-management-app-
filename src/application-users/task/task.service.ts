@@ -1,27 +1,144 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Model } from 'mongoose';
+
+
 import { CreateTaskInput } from './dto/create-task.input';
-import { UpdateTaskInput } from './dto/update-task.input';
+
+import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
-  create(createTaskInput: CreateTaskInput) {
-    
-    return 'This action adds a new task';
+  constructor(@InjectModel('Tasks') private readonly taskModule: Model<Task>) {}
+
+
+  async create(AssignedBy: string, createTaskInput: CreateTaskInput) {
+    const alreadyAssigned = await this.taskModule.findOne({
+      TitleOfTask: createTaskInput.TitleOfTask,
+    });
+    if (alreadyAssigned) {
+      throw new BadRequestException('task already assigned');
+    }
+    const taskInputs = {
+      ...createTaskInput,
+      AssignedBy,
+    };
+    const createTask = await this.taskModule.create(taskInputs);
+    const task = await createTask.save();
+    console.log('task=>', task);
+    return task;
   }
 
-  findAll() {
-    return `This action returns all task`;
+  async findAll() {
+    const tasks = await this.taskModule.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedTo',
+          foreignField: '_id',
+          as: 'AssignedTo',
+        },
+      },
+      { $unwind: '$AssignedTo' },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedBy',
+          foreignField: '_id',
+          as: 'AssignedBy',
+        },
+      },
+      { $unwind: '$AssignedBy' },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projectId',
+        },
+      },
+      { $unwind: '$projectId' },
+    ]);
+    console.log('tasks=>', tasks);
+    return tasks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findTaskAssignedByPm(currentUserId: string) {
+    const tasks = await this.taskModule.aggregate([
+      {
+        $match: {
+          AssignedBy: currentUserId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedTo',
+          foreignField: '_id',
+          as: 'AssignedTo',
+        },
+      },
+      { $unwind: '$AssignedTo' },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedBy',
+          foreignField: '_id',
+          as: 'AssignedBy',
+        },
+      },
+      { $unwind: '$AssignedBy' },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projectId',
+        },
+      },
+      { $unwind: '$projectId' },
+    ]);
+    console.log('tasks=>', tasks);
+    return tasks;
   }
 
-  update(id: number, updateTaskInput: UpdateTaskInput) {
-    return `This action updates a #${id} task`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async findTaskAssignedForUser(currentUserId: string) {
+    const tasks = await this.taskModule.aggregate([
+      {
+        $match: {
+          AssignedTo: currentUserId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedTo',
+          foreignField: '_id',
+          as: 'AssignedTo',
+        },
+      },
+      { $unwind: '$AssignedTo' },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'AssignedBy',
+          foreignField: '_id',
+          as: 'AssignedBy',
+        },
+      },
+      { $unwind: '$AssignedBy' },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projectId',
+        },
+      },
+      { $unwind: '$projectId' },
+    ]);
+    console.log('tasks=>', tasks);
+    return tasks;
   }
 }

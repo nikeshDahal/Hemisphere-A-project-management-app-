@@ -9,13 +9,16 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentAdmin } from '../authentication/Decorator/current.admin';
 import { ClockInOutput } from 'src/application-users/clock-in/dto/clock-in-output';
 import { ClockInService } from 'src/application-users/clock-in/clock-in.service';
+import { TaskListResponse } from 'src/application-users/task/dto/taskList-response';
+import { TaskService } from 'src/application-users/task/task.service';
 // import { RefreshJwtGuard } from '../authentication/guards/jwt-refresh.guard';
 
 @Resolver(() => Admin)
 export class AdminsResolver {
   constructor(
     private readonly adminsService: AdminsService,
-    private readonly clockInService:ClockInService
+    private readonly clockInService:ClockInService,
+    private readonly taskService : TaskService
     ) {}
 
   @Mutation(() => AdminResponse)
@@ -52,5 +55,11 @@ export class AdminsResolver {
   @Query(() => [ClockInOutput], { name: 'listClockedIns' })
   async findAll() {
     return this.clockInService.findAllClockedInProjects();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => [TaskListResponse], { name: 'listAllTasksByAdmin' })
+  listAllTasks() {
+    return this.taskService.findAll();
   }
 }

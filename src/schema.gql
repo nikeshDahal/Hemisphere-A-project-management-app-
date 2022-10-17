@@ -118,15 +118,13 @@ type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
   createClockIn(createClockInInput: CreateClockInInput!): ClockInOutput!
   createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
-  createTask(createTaskInput: CreateTaskInput!): Task!
+  createTasks(createTaskInput: CreateTaskInput!): Task!
   create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
   removeAdmin: AdminResponse!
   removeProject(id: String!): ProjectResponse!
-  removeTask(id: Int!): Task!
   removeUser(id: String!): User!
   updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
   updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
-  updateTask(updateTaskInput: UpdateTaskInput!): Task!
   updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
 }
 
@@ -156,12 +154,15 @@ type Query {
   MyClockIns: [ClockInOutput!]!
   ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
   getThisProject(id: String!): ProjectResponse!
+  listAllTasksByAdmin: [TaskListResponse!]!
   listApplicationusers: [ApplicationUserOutput!]!
+  listApplicationusersByPm: [ApplicationUserOutput!]!
   listClockedIns: [ClockInOutput!]!
+  listTaskByPm: [TaskListResponse!]!
+  listTaskByUser: [TaskListResponse!]!
   list_projects: [ProjectResponse!]!
   listingProjectAssignedToUser: [AssignedProjectsOutput!]!
   loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
-  task(id: Int!): Task!
   userProfile: ApplicationUserOutput!
   validateRefreshToken(refreshToken: String!): AdminLoginResponse!
   validateRefreshTokenOfUser(refreshToken: String!): UserLoginOutput!
@@ -177,11 +178,22 @@ type ResetPasswordOutput {
 }
 
 type Task {
+  AssignedBy: User!
   AssignedTo: User!
   Deadline: DateTime!
   TitleOfTask: String!
   description: String!
   projectId: Project!
+}
+
+type TaskListResponse {
+  AssignedBy: ApplicationUserOutput!
+  AssignedTo: ApplicationUserOutput!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  _id: ID!
+  description: String!
+  projectId: ProjectResponse!
 }
 
 input UpdateAdminInput {
@@ -197,15 +209,6 @@ input UpdateProjectInput {
   projectName: String
   startDate: DateTime
   users: [ID!]
-}
-
-input UpdateTaskInput {
-  AssignedTo: ID
-  Deadline: DateTime
-  TitleOfTask: String
-  description: String
-  id: Int!
-  projectId: ID
 }
 
 input UpdateUserInput {

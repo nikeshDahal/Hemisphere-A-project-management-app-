@@ -3,33 +3,39 @@ import { TaskService } from './task.service';
 import { Task } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
+import { CurrentUser } from '../auth/decorator/currentUser';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuardUser } from '../auth/guard/jwt-authGuard';
+import { TaskListResponse } from './dto/taskList-response';
+import { HasRoles } from '../auth/decorator/has-roles.decorator';
+import { UserType } from 'src/admin/users/entities/user.entity';
+import { RolesGuard } from '../auth/guard/roles.guard';
 
 @Resolver(() => Task)
 export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
-  @Mutation(() => Task)
-  createTask(@Args('createTaskInput') createTaskInput: CreateTaskInput) {
-    return this.taskService.create(createTaskInput);
+  @HasRoles(UserType.PROJECT_MANAGER)
+  @UseGuards(JwtAuthGuardUser , RolesGuard)
+  @Mutation(() => Task , { name: 'createTasks' })
+  createTask(@CurrentUser() currentUser:any ,@Args('createTaskInput') createTaskInput: CreateTaskInput) {
+    return this.taskService.create(currentUser._id,createTaskInput);
   }
 
-  @Query(() => [Task], { name: 'task' })
-  findAll() {
-    return this.taskService.findAll();
+  @HasRoles(UserType.PROJECT_MANAGER )
+  @UseGuards(JwtAuthGuardUser , RolesGuard)
+  @Query(()=>[TaskListResponse] , {name:"listTaskByPm"})
+  listTaskAssignedByPm(@CurrentUser() currentUser:any){
+    return this.taskService.findTaskAssignedByPm(currentUser._id)
   }
 
-  @Query(() => Task, { name: 'task' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.taskService.findOne(id);
+  @UseGuards(JwtAuthGuardUser)
+  @Query(()=>[TaskListResponse] , {name:"listTaskByUser"})
+  listTaskAssignedForUser(@CurrentUser() currentUser:any){
+    return this.taskService.findTaskAssignedForUser(currentUser._id)
   }
 
-  @Mutation(() => Task)
-  updateTask(@Args('updateTaskInput') updateTaskInput: UpdateTaskInput) {
-    return this.taskService.update(updateTaskInput.id, updateTaskInput);
-  }
+  
 
-  @Mutation(() => Task)
-  removeTask(@Args('id', { type: () => Int }) id: number) {
-    return this.taskService.remove(id);
-  }
+
 }

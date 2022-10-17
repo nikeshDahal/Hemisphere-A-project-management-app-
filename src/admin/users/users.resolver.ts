@@ -1,11 +1,14 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
+import { User, UserType } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ApplicationUserOutput } from './dto/response-user.output';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { JwtAuthGuardUser } from 'src/application-users/auth/guard/jwt-authGuard';
+import { RolesGuard } from 'src/application-users/auth/guard/roles.guard';
+import { HasRoles } from 'src/application-users/auth/decorator/has-roles.decorator';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -24,6 +27,14 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @HasRoles(UserType.PROJECT_MANAGER )
+  @UseGuards(JwtAuthGuardUser , RolesGuard)
+  @Query(() => [ApplicationUserOutput], { name: 'listApplicationusersByPm' })
+  ListOtherUser() {
+    return this.usersService.findOtherUserByPM();
+  }
+
+
  
   @UseGuards(JwtAuthGuard)
   @Mutation(() => ApplicationUserOutput)
@@ -36,4 +47,6 @@ export class UsersResolver {
   removeUser(@Args('id') id: string) {
     return this.usersService.remove(id);
   }
+
+  
 }

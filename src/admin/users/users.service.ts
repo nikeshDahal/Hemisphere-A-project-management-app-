@@ -28,6 +28,13 @@ export class UsersService {
     return users;
   }
 
+  async findOtherUserByPM(){
+    const users = await this.userModel.find( { userType: { $nin: [ 'project manager', 'client' ] } })
+    console.log("filtered users=>",users)
+    return users
+
+  }
+
   async findOne(id: string) {
     return await this.userModel.findById(id);
   }

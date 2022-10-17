@@ -34,6 +34,7 @@ export class AuthService {
     const payload = {
       userId: user.id,
       userEmail: user.email,
+      userRole : user.userType
     };
     const { accessToken, refreshToken } = await this.generateJwtToken(payload);
     await this.updateRefreshToken(user.id , refreshToken)
