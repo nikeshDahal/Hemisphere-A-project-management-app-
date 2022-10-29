@@ -1,0 +1,267 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Address {
+  _id: ID!
+  coordinates: [Float!]!
+  type: String!
+}
+
+type Admin {
+  email: String!
+  location: String!
+  password: String!
+  phone: Float!
+  refreshToken: String!
+  userName: String!
+}
+
+type AdminLoginResponse {
+  accessToken: String!
+  admin: AdminResponse!
+  refreshToken: String!
+}
+
+type AdminResponse {
+  _id: ID!
+  email: String!
+  location: String!
+  phone: Float!
+  userName: String!
+}
+
+type ApplicationUserOutput {
+  _id: ID!
+  companyName: String!
+  email: String!
+  name: String!
+  phone: Float!
+  refreshToken: String!
+  userType: UserType!
+  username: String!
+}
+
+type ClockInOutput {
+  _id: ID!
+  clockedInDate: String!
+  clockedInTime: String!
+  location: Address!
+  projectId: Project!
+  userId: User!
+}
+
+input CreateAdminInput {
+  email: String!
+  location: String!
+  password: String!
+  phone: Float!
+  userName: String!
+}
+
+input CreateClockInInput {
+  location: CreateLocationInput!
+  projectId: ID!
+}
+
+input CreateLocationInput {
+  coordinates: [Float!]!
+}
+
+input CreateProjectInput {
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
+  users: [ID!]!
+}
+
+input CreateTaskInput {
+  AssignedTo: ID!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  description: String!
+  projectId: ID!
+}
+
+input CreateUserInput {
+  companyName: String!
+  email: String!
+  name: String!
+  password: String!
+  phone: Float!
+  userType: UserType!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input ForgetPasswordInput {
+  email: String!
+}
+
+type ForgetPasswordResponse {
+  mailSend: Boolean!
+  token: String!
+}
+
+type Location {
+  coordinates: Float!
+}
+
+type Mutation {
+  ForgetPassword(ForgetPasswordInput: ForgetPasswordInput!): ForgetPasswordResponse!
+  ResetPassword(resetpasswordInput: ResetPasswordInput!): ResetPasswordOutput!
+  createAdmin(createAdminInput: CreateAdminInput!): AdminResponse!
+  createClockIn(createClockInInput: CreateClockInInput!): ClockInOutput!
+  createProject(createProjectInput: CreateProjectInput!): ProjectResponse!
+  createTasks(createTaskInput: CreateTaskInput!): Task!
+  create_application_user(createUserInput: CreateUserInput!): ApplicationUserOutput!
+  loginAdmin(loginDatas: loginInput!): AdminLoginResponse!
+  removeAdmin: AdminResponse!
+  removeProject(id: String!): ProjectResponse!
+  removeUser(id: String!): User!
+  updateAdmin(updateAdminInput: UpdateAdminInput!): AdminResponse!
+  updateProject(updateProjectInput: UpdateProjectInput!): ProjectResponse!
+  updateUser(updateUserInput: UpdateUserInput!): ApplicationUserOutput!
+}
+
+type Project {
+  createdBy: Admin!
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
+}
+
+type ProjectResponse {
+  _id: ID!
+  createdBy: AdminResponse!
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
+  totalAssignedUser: Float
+  users: [ApplicationUserOutput!]!
+}
+
+type ProjectResponseForUser {
+  _id: ID!
+  description: String!
+  endDate: DateTime!
+  projectName: String!
+  startDate: DateTime!
+}
+
+type Query {
+  AdminProfile: AdminResponse!
+  LoginUser(loginData: UserLoginInput!): UserLoginOutput!
+  MyClockIns: [ClockInOutput!]!
+  findUserById(id: String!): ApplicationUserOutput!
+  getThisProject(id: String!): ProjectResponse!
+  listAllTasksByAdmin: [TaskListResponse!]!
+  listApplicationusers: [ApplicationUserOutput!]!
+  listClockedIns: [ClockInOutput!]!
+  listTaskByPm: [TaskListResponse!]!
+  listTaskByUser: [TaskListResponse!]!
+  list_projects: [ProjectResponse!]!
+  listingProjectAssignedForUser: [ProjectResponseForUser!]!
+  listingProjectAssignedToPM: [ProjectResponse!]!
+  userProfile: ApplicationUserOutput!
+  validateRefreshToken(refreshToken: String!): AdminLoginResponse!
+  validateRefreshTokenOfUser(refreshToken: String!): UserLoginOutput!
+}
+
+input ResetPasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+}
+
+type ResetPasswordOutput {
+  resetPassword: Boolean!
+}
+
+type Task {
+  AssignedBy: User!
+  AssignedTo: User!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  description: String!
+  projectId: Project!
+}
+
+type TaskListResponse {
+  AssignedBy: ApplicationUserOutput!
+  AssignedTo: ApplicationUserOutput!
+  Deadline: DateTime!
+  TitleOfTask: String!
+  _id: ID!
+  description: String!
+  projectId: ProjectResponse!
+}
+
+input UpdateAdminInput {
+  email: String
+  location: String
+  password: String
+  phone: Float
+  userName: String
+}
+
+input UpdateProjectInput {
+  _id: String!
+  description: String
+  endDate: DateTime
+  projectName: String
+  startDate: DateTime
+  users: [ID!]
+}
+
+input UpdateUserInput {
+  _id: ID!
+  companyName: String
+  email: String
+  name: String
+  password: String
+  phone: Float
+  userType: UserType
+  username: String
+}
+
+type User {
+  companyName: String!
+  createdBy: Admin!
+  email: String!
+  name: String!
+  password: String!
+  phone: Float!
+  refreshToken: String!
+  userType: String!
+  username: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type UserLoginOutput {
+  accessToken: String!
+  refreshToken: String!
+  user: ApplicationUserOutput!
+}
+
+enum UserType {
+  CLIENT
+  NORMAL_STAFF
+  PROJECT_MANAGER
+  TRADIES
+}
+
+input loginInput {
+  email: String!
+  password: String!
+}
